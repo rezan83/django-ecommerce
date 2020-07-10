@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Detail
+{% endblock title %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+            <h1 class="text-center mx-auto m-5">Product's Details</h1>
+
+            <div class="row bg-white mt-4 pt-4">
+
+                <div class="col">
+                    <img class=" img-fluid p-4" src="{{ product.image.url }}" alt="">
+                </div>
+
+                <div class="col">
+                    <h1 class="product-title my-4">{{product.name}} </h1>
+                    <h4 class="my-2">$ {{product.price}}</h4>
+                    <p class="product-description mt-5">product description</p>
+                    <p class="product-text">
+                        {{product.discription}}
+                    </p>
+                    {% if product.stock <= 0 %}
+                        <p class="product-outOfStock mt-5">product out of stock</p>
+                    {% else %}
+                        <p class="product-outOfStock mt-5">add to cart</p>
+                    {% endif %}
+ 
+                </div>
+
+            </div>
+ 
+    </div>
+</div>
+
+{% endblock content %}

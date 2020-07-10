@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-sm bg-dark">
+
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <i class="mdi mdi-storefront text-normal" style="font-size:3em"></i>
+        </a>
+
+        <button type="button" class="btn navbar-toggler text-light"
+          data-toggle="collapse" 
+          data-target="#navbarToggler" 
+          aria-controls="navbarToggler">
+          
+            <i class="mdi mdi-menu text-light" style="font-size:3em"></i>
+        </button>
+
+        <div id="navbarToggler" class="collapse navbar-collapse justify-content-between">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a data-toggle="dropdown" class="nav-link text-light text-uppercase font-weight-bold px-3 dropdown-toggle" >Categories</a>
+                    <div class="dropdown-menu">
+                        {% for category in categories %}
+                            <a class="dropdown-item" href="{{category.url}}">
+                                {{category.name}}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link text-light text-uppercase font-weight-bold px-3" href="">Contact</a></li>
+                <li class="nav-item"><a class="nav-link text-light text-uppercase font-weight-bold px-3" href="{% url 'about' %}">About</a></li>
+            </ul>
+
+            <form action="" class="form-inline">
+                <div class="input-group">
+                    <input class="form-control ml-3" type="text" name="" id="">
+                    <div class="input-group-append">
+                        <button class="btn btn-info" style="padding:0;width:3em"><i class="mdi mdi-magnify" style="font-size:1.4em;margin:0;padding:0"></i></button>
+                    </div>
+                </div>
+            
+            </form>
+        </div>
+            
+</nav>

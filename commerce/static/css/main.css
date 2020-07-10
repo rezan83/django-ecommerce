@@ -1,0 +1,16 @@
+html {
+  font-size: calc(8px + 0.5vw);
+}
+body {
+  background-color: #ededed;
+}
+.product-title {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+.product-description {
+  text-transform: uppercase;
+}
+.product-text {
+  padding-right: 20px;
+}

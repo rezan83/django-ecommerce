@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+
+<div>
+    {% load static %}
+    <img src="{% static 'img/hero.png' %}" style="width:100%" alt="">
+</div>
+<div class="py-4">
+    <div class="container">
+    <div class="row">
+        <div class="col-10 mx-auto my-2 text-center">
+       
+            <h1 class="text-capitalize font-weight-bold">All Products  {% if category %} in {{category}}
+        
+        {% endif %}</h1>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+    {% for product in  products %}
+    
+        <div class="col-9 mx-auto col-md-6 col-lg-3">
+            <div class="card mb-4 " style="border-color:transparent">
+                <div class="p-2">
+                <a href="{{ product.url}} ">
+                    <img class="card-img-top p-4" src="{{ product.image.url }}" alt="{{ product.name }}">
+                 </a>
+                    <div class="footer bg-white d-flex p-2 justify-content-around">
+                        <p class="font-weight-bold mb-0">
+                            {{ product.name }}
+                        </p>
+                        <h5 class="text-info mb-0">$ {{ product.price }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}
