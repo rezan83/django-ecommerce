@@ -12,4 +12,7 @@ urlpatterns = [
     path('cart/remove/<int:product_id>/',
          views.remove_from_cart, name="remove_from_cart"),
     path('cart/', views.cart_detail, name="cart_detail"),
+    path('account/signup/', views.signupView, name="signup"),
+    path('account/signin/', views.signinView, name="signin"),
+    path('account/signout/', views.signoutView, name="signout"),
 ]

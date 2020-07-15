@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}
+Sign Up
+{% endblock title %}
+{% block content %}
+<div>
+    {% if not form.is_valid %}
+        <div class="mx-auto">
+
+            <br>
+                <h1 class="product-title text-center">
+                    Create a new account
+                </h1>
+            <br>
+            <div class="col-9 col-sm-9 col-md-6 col-lg-6 mx-auto bg-light">
+                <br>
+                
+                <form method="POST" class="p-4">
+                <p>Enter Your Credentials</p>
+                {% csrf_token %}
+                    <p>{{form | crispy}}</p>
+                    <button type="submit" name="submit" class="btn btn-secondary mb-3">
+                        Sign Up
+                    </button>
+                
+                </form>
+            </div>
+            
+        </div>
+    {% else %}
+
+         <div class="col-9 col-sm-9 col-md-6 col-lg-6 mx-auto bg-light text-center m-4 p-4">
+            <br>
+            <h1 class="product-title ">
+                Welcome! you have signed up successfully
+            </h1>
+            <p>
+                You can continue shopping now
+                <br>
+                <a href="{%url "home"%}">See Our Products</a>
+                <br>
+            </p>
+        </div>
+ 
+
+    {% endif %}
+</div>
+<br>
+
+{% endblock content%}

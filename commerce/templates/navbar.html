@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-sm bg-dark">
 
-        <a class="navbar-brand" href="{% url 'home' %}">
+        <a class="navbar-brand ml-3 mr-5" href="{% url 'home' %}">
             <i class="mdi mdi-storefront text-normal" style="font-size:2em"></i>
         </a>
 
@@ -26,11 +26,42 @@
                 </li>
                 <li class="nav-item"><a class="d-flex align-items-center nav-link text-light text-uppercase font-weight-bold p-3" href="">Contact</a></li>
                 <li class="nav-item"><a class="d-flex align-items-center nav-link text-light text-uppercase font-weight-bold p-3" href="{% url 'about' %}">About</a></li>
+                
+                {% if request.user.is_authenticated and request.user.first_name%}
                 <li class="nav-item">
-                    <a class="nav-link text-light p-3" href="{% url 'cart_detail' %}">
-                        <i class="mdi mdi-cart" style="font-size:1.5em" ></i>({{counter}})
+                    <a class="d-flex align-items-center nav-link text-light p-3" href="">
+                         hello {{request.user.first_name}}
+                        <i class="mdi mdi-account ml-1" style="font-size:1.5em" ></i>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="d-flex align-items-center nav-link text-light p-3" href="{% url 'signout' %}">
+                        Logout
+                        <i class="mdi mdi-location-exit ml-1" style="font-size:1.5em" ></i>
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="d-flex align-items-center nav-link text-light p-3" href="{% url 'signup' %}">
+                        Signup 
+                        <i class="mdi mdi-account-plus ml-1" style="font-size:1.5em" ></i>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="d-flex align-items-center nav-link text-light p-3" href="{% url 'signout' %}">
+                        Login
+                        <i class="mdi mdi-login-variant ml-1" style="font-size:1.5em" ></i>
+                    </a>
+                </li>
+                {% endif %}
+                {% if counter %}
+                <li class="nav-item ml-5">
+                    <a class="d-flex align-items-center nav-link text-light p-3" href="{% url 'cart_detail' %}">
+                        <i class="mdi mdi-cart" style="font-size:1.5em" >({{counter}})</i>
+                    </a>
+                </li>
+                {% endif %}
             </ul>
 
 

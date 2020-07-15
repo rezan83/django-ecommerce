@@ -31,8 +31,10 @@ main {
 }
 .nav-item a {
   height: 100%;
-  display: table-cell;
-  vertical-align: middle;
+}
+.errorList a {
+  color: #f00;
+  font-weight: bold;
 }
 footer {
   position: absolute;
