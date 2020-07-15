@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-sm bg-dark">
 
         <a class="navbar-brand" href="{% url 'home' %}">
-            <i class="mdi mdi-storefront text-normal" style="font-size:3em"></i>
+            <i class="mdi mdi-storefront text-normal" style="font-size:2em"></i>
         </a>
 
         <button type="button" class="btn navbar-toggler text-light"
@@ -10,12 +10,12 @@
           aria-controls="navbarToggler">
           
             <i class="mdi mdi-menu text-light" style="font-size:3em"></i>
+            
         </button>
-
         <div id="navbarToggler" class="collapse navbar-collapse justify-content-between">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a data-toggle="dropdown" class="nav-link text-light text-uppercase font-weight-bold px-3 dropdown-toggle" >Categories</a>
+                    <a data-toggle="dropdown" class="d-flex align-items-center nav-link text-light text-uppercase font-weight-bold p-3 dropdown-toggle" >Categories</a>
                     <div class="dropdown-menu">
                         {% for category in categories %}
                             <a class="dropdown-item" href="{{category.url}}">
@@ -24,9 +24,15 @@
                         {% endfor %}
                     </div>
                 </li>
-                <li class="nav-item"><a class="nav-link text-light text-uppercase font-weight-bold px-3" href="">Contact</a></li>
-                <li class="nav-item"><a class="nav-link text-light text-uppercase font-weight-bold px-3" href="{% url 'about' %}">About</a></li>
+                <li class="nav-item"><a class="d-flex align-items-center nav-link text-light text-uppercase font-weight-bold p-3" href="">Contact</a></li>
+                <li class="nav-item"><a class="d-flex align-items-center nav-link text-light text-uppercase font-weight-bold p-3" href="{% url 'about' %}">About</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-light p-3" href="{% url 'cart_detail' %}">
+                        <i class="mdi mdi-cart" style="font-size:1.5em" ></i>({{counter}})
+                    </a>
+                </li>
             </ul>
+
 
             <form action="" class="form-inline">
                 <div class="input-group">

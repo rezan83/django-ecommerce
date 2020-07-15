@@ -10,32 +10,37 @@ Detail
 
 <div class="container">
     <div class="row">
-            <h1 class="text-center mx-auto m-5">Product's Details</h1>
+        <div class="col-sm-12">
+            <h1 class="text-center mx-auto m-4">Product's Details</h1>
+        </div>
 
-            <div class="row bg-white mt-4 pt-4">
 
-                <div class="col">
-                    <img class=" img-fluid p-4" src="{{ product.image.url }}" alt="">
-                </div>
+    <div class="row bg-white mx-auto mt-4 py-4">
 
-                <div class="col">
-                    <h1 class="product-title my-4">{{product.name}} </h1>
-                    <h4 class="my-2">$ {{product.price}}</h4>
-                    <p class="product-description mt-5">product description</p>
-                    <p class="product-text">
-                        {{product.discription}}
-                    </p>
-                    {% if product.stock <= 0 %}
-                        <p class="product-outOfStock mt-5">product out of stock</p>
-                    {% else %}
-                        <p class="product-outOfStock mt-5">add to cart</p>
-                    {% endif %}
- 
-                </div>
+        <div class="col-sm-6">
+            <img class=" img-fluid p-4" src="{{ product.image.url }}" alt="product image">
+        </div>
 
-            </div>
- 
+        <div class="col-sm-6">
+            <h1 class="product-title my-4">{{product.name}} </h1>
+            <h4 class="my-2">$ {{product.price}}</h4>
+            <p class="product-description mt-5">product description</p>
+            <p class="product-text">
+                {{product.discription}}
+            </p>
+            {% if product.stock <= 0 %}
+                <p class="product-outOfStock mt-5">product out of stock</p>
+            {% else %}
+            <a href="{% url 'add_to_cart' product.id %} ">
+                <button class="btn btn-dark text-white mt-5">add to cart</button>
+            </a>
+            {% endif %}
+
+        </div>
+
     </div>
+ 
 </div>
+
 
 {% endblock content %}
