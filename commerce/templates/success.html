@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}
+Succeeded
+{% endblock title %}
+{% block content %}
+<div class="mx-auto">
+    <h1 class="product-title text-center mt-5">
+        Yor Payment succeeded 
+    </h1>
+    <h2 class="text-center mt-5">Order number: {{ order.id }}</h2>
+    <p class="text-center mt-5">Thanks for your purchace</p>
+</div>
+{% endblock content%}

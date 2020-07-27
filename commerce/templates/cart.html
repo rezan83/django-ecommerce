@@ -89,6 +89,33 @@ Cart
             </tbody>
         </table>
         <div class="mx-auto">
+        {% comment %} sripe checkout {% endcomment %}
+
+        {% comment %} new stripe to be implemented{% endcomment %}
+
+        {% comment %} <button id="checkout-button"type="button" class="btn btn-primary btn-lg btn-block text-white">
+            Checkout with Card
+        </button> {% endcomment %}
+
+        {% comment %} old stripe to be replaced {% endcomment %}
+        <form action="" method="POST">
+        {% csrf_token %}
+            <script
+                src="https://checkout.stripe.com/checkout.js"
+                class="stripe-button"
+                data-key="{{data_key}}"
+                data-name="Custom t-shirt"
+                data-description="{{description}}"
+                data-amount="{{stripe_total}}"
+                data-locale="auto"
+                data-shipping-address="true"
+                data-billing-address="true"
+                data-zip-code="true"
+                data-currency="eur"
+            >
+            </script>
+        </form>
+
             <a href="{% url 'home' %}" style="text-decoration: none">
                 <button type="button" class="btn btn-dark btn-lg btn-block text-white">
                     Continue shopping
@@ -98,6 +125,25 @@ Cart
     </div>
 
 </div>
-{% endif %} 
+{% endif %}
+
+{% comment %} new stripe to be implemented{% endcomment %}
+
+{% comment %} <script src="https://js.stripe.com/v3/">
+
+    var stripe = Stripe('{{data_key}}');
+
+    var checkoutButton = document.getElementById('checkout-button');
+
+    checkoutButton.addEventListener('click', function() {
+        stripe.redirectToCheckout({sessionId: '{{CHECKOUT_SESSION.id}}'})
+        .then(function (result) {
+            console.log(result)
+            // If `redirectToCheckout` fails due to a browser or network
+            // error, display the localized error message to your customer
+            // using `result.error.message`.
+        });
+    });
+</script> {% endcomment %}
 
 {% endblock content %}

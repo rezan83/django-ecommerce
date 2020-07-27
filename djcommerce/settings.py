@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'stripe',
     'crispy_forms',
     'commerce',
 ]
@@ -130,5 +130,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # crispy forms template
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# stripe test API keys
+STRIPE_PUBLISHABLE = "pk_test_5ppmubMaqf6b1YePafnZJPma"
+STRIPE_SECRET = "sk_test_4YJlBH4peqj3uZ2eXTQvu23o"
+
+# our store name
+STORE_NAME = "MyEstora"
+

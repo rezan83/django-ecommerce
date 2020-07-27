@@ -8,6 +8,15 @@
   letter-spacing: 0.2em;
   background-color: #f8f9fa !important;
 }
+.stripe-button-el {
+  width: 100%;
+  display: block;
+  margin-bottom: 1vh;
+}
+.stripe-button-el span {
+  height: 4vh !important;
+  font-size: 1.2em !important;
+}
 html {
   font-size: calc(8px + 0.5vw);
 }

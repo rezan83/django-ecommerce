@@ -15,4 +15,6 @@ urlpatterns = [
     path('account/signup/', views.signupView, name="signup"),
     path('account/signin/', views.signinView, name="signin"),
     path('account/signout/', views.signoutView, name="signout"),
+    path('account/success/<int:order_id>/', views.success, name="success"),
+    path('account/cancel/', views.cancel, name="cancel"),
 ]
