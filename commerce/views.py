@@ -8,6 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 import stripe
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 
 def home(request, category_slug=None):
@@ -94,24 +95,25 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
     try:
         cart = _get_cart(request)
         cart_items = CartItem.objects.filter(cart=cart, active=True)
-        line_items = []
+        # # line_items is related to new stripe api
+        # line_items = []
         for item in cart_items:
             total += item.quantity*item.product.price
             counter += item.quantity
-            line_items.append(
-                {'price_data': {
-                    'currency': 'eur',
-                    'product_data': {
-                        'name': item.product.name,
-                    },
-                    'unit_amount': int(item.product.price)*100,
-                },
-                    'quantity': item.quantity,
-                }
-            )
-
+            # line_items.append(
+            #     {'price_data': {
+            #         'currency': 'eur',
+            #         'product_data': {
+            #             'name': item.product.name,
+            #         },
+            #         'unit_amount': int(item.product.price)*100,
+            #     },
+            #         'quantity': item.quantity,
+            #     }
+            # )
+        registered_email = request.user.email
         context = {'cart': cart, 'cart_items': cart_items,
-                   'total': total, 'counter': counter}
+                   'total': total, 'counter': counter, 'email': registered_email}
     except ObjectDoesNotExist:
         pass
 
@@ -120,11 +122,11 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
     stripe_total = int(total*100)
     description = settings.STORE_NAME + ' - new order'
 
-    # old stripe payment
+    ## old stripe payment
 
     if request.method == 'POST':
         try:
-            token = request.POST['stripeToken']
+            token = request.POST['stripeToken'] or registered_email
             email = request.POST['stripeEmail']
             billingName = request.POST['stripeBillingName']
             billingAddress1 = request.POST['stripeBillingAddressLine1']
@@ -180,7 +182,7 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
         except stripe.error.CardError as e:
             return False, e
 
-    # new stripe to be implemented
+    ## new stripe to be implemented
 
     # domain_url = 'http://localhost:8000/home/account/'
     # try:
@@ -198,16 +200,13 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
     #         cancel_url=domain_url+'cancel/',
     #     )
 
-        # delete this
-        # print(request.user.first_name)
-        # print(session)
-        # print(stripe.Customer.retrieve("8"))
     # except stripe.error.CardError as e:
     #     return False, e
 
     payment_context = dict(data_key=data_key, stripe_total=stripe_total,
                            description=description)
-    # CHECKOUT_SESSION=session)
+    # # CHECKOUT_SESSION is related to new stripe api
+    # payment_context.update({'CHECKOUT_SESSION':session})
     context.update(payment_context)
     return render(request, 'cart.html', context)
 
@@ -248,12 +247,31 @@ def signoutView(request):
     return redirect('signin')
 
 
+# payment success and cancel views
+
 def success(request, order_id=None):
-
     order = Order.objects.get(id=order_id)
-
     return render(request, 'success.html', {'order':order})
 
 
 def cancel(request):
     return render(request, 'cancel.html')
+
+
+# orders_history and detail views
+
+@login_required(redirect_field_name="next", login_url="signin")
+def orders_history(request):
+    if request.user.is_authenticated:
+        email = request.user.email
+        orders = Order.objects.filter(emailAddress=email)
+    return render(request, 'orders_history.html', {'orders': orders})
+
+
+@login_required(redirect_field_name="next", login_url="signin")
+def order_detail(request, order_id):
+    if request.user.is_authenticated:
+        email = request.user.email
+        order = Order.objects.get(id=order_id, emailAddress=email)
+        order_items = OrderItem.objects.filter(order=order)
+    return render(request, 'order_detail.html', {'order': order, 'order_items': order_items})

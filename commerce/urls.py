@@ -17,4 +17,7 @@ urlpatterns = [
     path('account/signout/', views.signoutView, name="signout"),
     path('account/success/<int:order_id>/', views.success, name="success"),
     path('account/cancel/', views.cancel, name="cancel"),
+    path('account/orders_history/', views.orders_history, name="orders_history"),
+    path('account/order_detail/<int:order_id>/',
+         views.order_detail, name="order_detail"),
 ]
