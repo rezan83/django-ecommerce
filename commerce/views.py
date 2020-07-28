@@ -14,13 +14,19 @@ from django.contrib.auth.decorators import login_required
 def home(request, category_slug=None):
 
     category = None
-    if category_slug != None:
+    if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.all().filter(category=category, available=True)
     else:
         products = Product.objects.all().filter(available=True)
 
     return render(request, 'home.html', {'category': category, 'products': products})
+
+
+def search(request):
+    query = request.GET['query']
+    products = Product.objects.filter(name__contains=query)
+    return render(request, 'home.html', {'products': products, 'search': True})
 
 
 def about(request):
