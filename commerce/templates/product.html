@@ -15,29 +15,63 @@ Detail
         </div>
 
 
-    <div class="row bg-white mx-auto mt-4 py-4">
+        <div class="row bg-white mx-auto mt-4 py-4">
 
-        <div class="col-sm-6">
-            <img class=" img-fluid p-4" src="{{ product.image.url }}" alt="product image">
+            <div class="col-sm-6">
+                <img class=" img-fluid p-4" src="{{ product.image.url }}" alt="product image">
+            </div>
+
+            <div class="col-sm-6">
+                <h1 class="product-title my-4">{{product.name}} </h1>
+                <h4 class="my-2">$ {{product.price}}</h4>
+                <p class="product-description mt-5">product description</p>
+                <p class="product-text">
+                    {{product.discription}}
+                </p>
+                {% if product.stock <= 0 %}
+                    <p class="product-outOfStock mt-5">product out of stock</p>
+                {% else %}
+                <a href="{% url 'add_to_cart' product.id %} ">
+                    <button class="btn btn-dark text-white mt-5">add to cart</button>
+                </a>
+                {% endif %}
+
+            </div>
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Reviews</h4>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <div class="card-body">
+                        <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <textarea name="content" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                        <button type="submit" class="btn btn-success">Post</button>
+                        </div>
+                        </form>
+                    </div>
+                    {% endif %}
+
+                    {% if reviews.count > 0 %}
+                    <ul class="list-group list-group-flush">
+                    {% for review in reviews %}
+                        <li class="list-group-item"> <h5>{{review.user.username}}</h5>
+                        <p class="card-text">{{review.content}}</p>
+                        </li>
+                    {% endfor %}
+                    </ul>
+
+                    {% endif %}
+
+                </div>
+            </div>
         </div>
 
-        <div class="col-sm-6">
-            <h1 class="product-title my-4">{{product.name}} </h1>
-            <h4 class="my-2">$ {{product.price}}</h4>
-            <p class="product-description mt-5">product description</p>
-            <p class="product-text">
-                {{product.discription}}
-            </p>
-            {% if product.stock <= 0 %}
-                <p class="product-outOfStock mt-5">product out of stock</p>
-            {% else %}
-            <a href="{% url 'add_to_cart' product.id %} ">
-                <button class="btn btn-dark text-white mt-5">add to cart</button>
-            </a>
-            {% endif %}
-
-        </div>
-
+        
     </div>
  
 </div>

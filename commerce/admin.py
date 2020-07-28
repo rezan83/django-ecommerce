@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Order, OrderItem
+from .models import Category, Product, Order, OrderItem, Review
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -58,3 +58,6 @@ class OrderAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+admin.site.register(Review)

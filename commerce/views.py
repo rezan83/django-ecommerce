@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
-from .models import Category, Product, Cart, CartItem, Order, OrderItem
+from .models import Category, Product, Cart, CartItem, Order, OrderItem, Review
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
 from .form import SignUpForm
@@ -29,8 +29,13 @@ def about(request):
 
 def product(request, product_id):
     product = Product.objects.get(pk=product_id)
+    content = request.POST.get('content', None)
+    reviews = Review.objects.filter(user=request.user, product=product)
+    if request.method == 'POST' and request.user.is_authenticated and content:
+        review = Review.objects.create(
+            user=request.user, product=product, content=content)
 
-    return render(request, 'product.html', {'product': product})
+    return render(request, 'product.html', {'product': product, 'reviews': reviews})
 
 
 def _get_cart_session(request):
@@ -122,7 +127,7 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
     stripe_total = int(total*100)
     description = settings.STORE_NAME + ' - new order'
 
-    ## old stripe payment
+    # old stripe payment
 
     if request.method == 'POST':
         try:
@@ -151,18 +156,18 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
 
             try:
                 order = Order.objects.create(token=token,
-                                                     total=total,
-                                                     emailAddress=email,
-                                                     billingName=billingName,
-                                                     billingAddress1=billingAddress1,
-                                                     billingCity=billingCity,
-                                                     billingPostcode=billingPostcode,
-                                                     billingCountry=billingCountry,
-                                                     shippingName=shippingName,
-                                                     shippingAddress1=shippingAddress1,
-                                                     shippingCity=shippingCity,
-                                                     shippingPostcode=shippingPostcode,
-                                                     shippingCountry=shippingCountry)
+                                             total=total,
+                                             emailAddress=email,
+                                             billingName=billingName,
+                                             billingAddress1=billingAddress1,
+                                             billingCity=billingCity,
+                                             billingPostcode=billingPostcode,
+                                             billingCountry=billingCountry,
+                                             shippingName=shippingName,
+                                             shippingAddress1=shippingAddress1,
+                                             shippingCity=shippingCity,
+                                             shippingPostcode=shippingPostcode,
+                                             shippingCountry=shippingCountry)
                 order.save()
 
                 for cart_item in cart_items:
@@ -182,7 +187,7 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
         except stripe.error.CardError as e:
             return False, e
 
-    ## new stripe to be implemented
+    # new stripe to be implemented
 
     # domain_url = 'http://localhost:8000/home/account/'
     # try:
@@ -251,7 +256,7 @@ def signoutView(request):
 
 def success(request, order_id=None):
     order = Order.objects.get(id=order_id)
-    return render(request, 'success.html', {'order':order})
+    return render(request, 'success.html', {'order': order})
 
 
 def cancel(request):
