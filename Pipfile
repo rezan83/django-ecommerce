@@ -8,6 +8,9 @@ Django = "*"
 Pillow = "*"
 django-crispy-forms = "*"
 stripe = "*"
+python-dotenv = "*"
+sendgrid = "*"
+xhtml2pdf = "*"
 
 [dev-packages]
 

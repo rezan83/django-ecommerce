@@ -1,6 +1,13 @@
+import os
+import base64
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import *
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from .models import Category, Product, Cart, CartItem, Order, OrderItem, Review
+from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
 from .form import SignUpForm
@@ -25,11 +32,66 @@ def home(request, category_slug=None):
 
 def search(request):
     query = request.GET['query']
-    products = Product.objects.filter(name__contains=query)
+    products = Product.objects.filter(
+        Q(name__icontains=query) | Q(discription__icontains=query))
     return render(request, 'home.html', {'products': products, 'search': True})
+
+# render html template to pdf
+
+
+def _render_html_pdf(html_source, pdf_output):
+    result_file = open(pdf_output, "w+b")
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html_source, dest=result_file)
+    result_file.close()
+    if pisa_status.err:
+        return False
+    else:
+        return True
+
+# sendgrid helper function
+
+
+def _send_template_email(html_source, to_email, subject, pdf_output=None):
+    content = Content("text/html", html_source)
+    message = Mail(
+        from_email=From(settings.EMAIL_HOST_USER),
+        to_emails=To(to_email),
+        subject=Subject(subject),
+        html_content=content,
+    )
+    if pdf_output:
+        # encode pdf file to base64
+        with open(pdf_output, "rb") as pdf_file:
+            data = pdf_file.read()
+            pdf_file.close()
+            encoded_file = base64.b64encode(data).decode()
+
+        # prepare attachment
+        attachedFile = Attachment(
+            FileContent(encoded_file),
+            FileName(pdf_output),
+            FileType('application/pdf'),
+            Disposition('attachment')
+        )
+
+        message.attachment = attachedFile
+
+    try:
+        sg = SendGridAPIClient(
+            settings.SENDGRID_API_KEY)
+        response = sg.send(message)
+        os.remove(pdf_output)
+        print(response.status_code, response.body, response.headers)
+
+    except Exception as e:
+        os.remove(pdf_output)
+        print(e.message)
 
 
 def about(request):
+
     return render(request, 'about.html')
 
 
@@ -149,6 +211,7 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
             shippingCity = request.POST['stripeShippingAddressCity']
             shippingPostcode = request.POST['stripeShippingAddressZip']
             shippingCountry = request.POST['stripeShippingAddressCountryCode']
+
             customer = stripe.Customer.create(
                 source=token,
                 email=email
@@ -187,13 +250,30 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
                     product.stock -= cart_item.quantity
                     product.save()
                     cart_item.delete()
+
+                # preparing purchase email
+                order_items = OrderItem.objects.filter(order=order)
+                email_context = {'order': order, 'order_items': order_items}
+                html_source = get_template('email/email.html')
+                html_source = html_source.render(email_context)
+                pdf_output = 'purchase.pdf'
+                is_pdf_rendered = _render_html_pdf(html_source, pdf_output)
+                if is_pdf_rendered:
+                    to_email = email
+                    subject = 'Thanks For Your Purchase'
+                    _send_template_email(
+                        html_source, to_email, subject, pdf_output)
+                else:
+                    _send_template_email(
+                        html_source, to_email, subject, pdf_output=None)
+
                 return redirect('success', order.id)
             except ObjectDoesNotExist:
                 pass
         except stripe.error.CardError as e:
             return False, e
 
-    # new stripe to be implemented
+    # new stripe api to be implemented
 
     # domain_url = 'http://localhost:8000/home/account/'
     # try:
@@ -230,9 +310,13 @@ def signupView(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
             new_user = User.objects.get(username=username)
             customer_grup = Group.objects.get(name='Customer')
             customer_grup.user_set.add(new_user)
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
 
     return render(request, 'signup.html', {'form': form})
 

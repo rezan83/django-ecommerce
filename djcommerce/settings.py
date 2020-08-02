@@ -10,20 +10,41 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+from sendgrid.helpers.mail import Mail
+from sendgrid import SendGridAPIClient
 import os
+import ast
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# load environment variables using dotenv library
+load_dotenv()
+# # OR, the same with increased verbosity
+# load_dotenv(verbose=True)
+
+# # OR, explicitly providing path to '.env'
+#from pathlib import Path  # Python 3.6+ only
+# env_path = Path('.') / '.env'
+# load_dotenv(dotenv_path=env_path)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pd_kjqd(hm4tvxl=@b#1fjet0-ne22d6qrb!5t!rsmul-^7&9$'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.getenv('DJANGO_DEVELOPMENT'):
+    DEBUG = True
+    DB_DEFAULT = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+else:
+    DEBUG = False
+    DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
 
 ALLOWED_HOSTS = []
 
@@ -79,10 +100,7 @@ WSGI_APPLICATION = 'djcommerce.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': DB_DEFAULT
 }
 
 
@@ -133,9 +151,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # stripe test API keys
-STRIPE_PUBLISHABLE = "pk_test_5ppmubMaqf6b1YePafnZJPma"
-STRIPE_SECRET = "sk_test_4YJlBH4peqj3uZ2eXTQvu23o"
+STRIPE_PUBLISHABLE = os.getenv('STRIPE_PUBLISHABLE')
+STRIPE_SECRET = os.getenv('STRIPE_SECRET')
 
 # our store name
-STORE_NAME = "MyEstora"
+STORE_NAME = os.getenv('STORE_NAME')
+
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+EMAIL_BACKEND = 'sendgrid'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT  = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER  = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+
+
 
