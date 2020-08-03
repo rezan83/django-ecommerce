@@ -28,11 +28,18 @@
                 <li class="nav-item"><a class="d-flex align-items-center nav-link text-light text-uppercase font-weight-bold p-3" href="{% url 'about' %}">About</a></li>
                 
                 {% if request.user.is_authenticated and request.user.first_name%}
-                <li class="nav-item">
-                    <a class="d-flex align-items-center nav-link text-light p-3" href="">
+                <li class="nav-item dropdown">
+                    <a data-toggle="dropdown" class="d-flex align-items-center nav-link text-light p-3 dropdown-toggle" href="">
                          hello {{request.user.first_name}}
+                    
                         <i class="mdi mdi-account ml-1" style="font-size:1.5em" ></i>
                     </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'orders_history' %}">
+                            Order History
+                        </a>
+
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="d-flex align-items-center nav-link text-light p-3" href="{% url 'signout' %}">
