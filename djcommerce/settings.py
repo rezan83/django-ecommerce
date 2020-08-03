@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'stripe',
     'crispy_forms',
+    'widget_tweaks',
     'commerce',
 ]
 
@@ -159,10 +160,11 @@ STORE_NAME = os.getenv('STORE_NAME')
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
-EMAIL_BACKEND = 'sendgrid'
+EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT  = os.getenv('EMAIL_PORT')
 EMAIL_HOST_USER  = os.getenv('EMAIL_HOST_USER')
+EMAIL_TO = os.getenv('EMAIL_TO')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False

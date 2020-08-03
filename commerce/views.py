@@ -10,7 +10,7 @@ from .models import Category, Product, Cart, CartItem, Order, OrderItem, Review
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
-from .form import SignUpForm
+from .form import SignUpForm, ContactForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 import stripe
@@ -53,10 +53,12 @@ def _render_html_pdf(html_source, pdf_output):
 # sendgrid helper function
 
 
-def _send_template_email(html_source, to_email, subject, pdf_output=None):
-    content = Content("text/html", html_source)
+def _send_email(subject, text_html, to_email=None, pdf_output=None):
+    content = Content("text/html", text_html)
+    from_email = settings.EMAIL_HOST_USER
+    to_email = (to_email if to_email else settings.EMAIL_TO)
     message = Mail(
-        from_email=From(settings.EMAIL_HOST_USER),
+        from_email=From(from_email),
         to_emails=To(to_email),
         subject=Subject(subject),
         html_content=content,
@@ -82,17 +84,34 @@ def _send_template_email(html_source, to_email, subject, pdf_output=None):
         sg = SendGridAPIClient(
             settings.SENDGRID_API_KEY)
         response = sg.send(message)
-        os.remove(pdf_output)
+        if pdf_output:
+            os.remove(pdf_output)
         print(response.status_code, response.body, response.headers)
 
     except Exception as e:
-        os.remove(pdf_output)
-        print(e.message)
+        if pdf_output:
+            os.remove(pdf_output)
+        print(e)
 
 
 def about(request):
-
     return render(request, 'about.html')
+
+def contact(request):
+    form = ContactForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid:
+            name = request.POST.get('name')
+            your_email = request.POST.get('your_email')
+            subject = request.POST.get('subject')
+            message = request.POST.get('message')
+
+            message_format = f'<strong>{name} with email: {your_email} has sent you a message: \n \n{message}<strong>'
+
+            _send_email(subject=subject, text_html=message_format)
+            return render(request, 'contact_success.html')
+
+    return render(request, 'contact.html', {'form':form})
 
 
 def product(request, product_id):
@@ -258,14 +277,14 @@ def cart_detail(request, total=0, counter=0, cart_items=None, context=None):
                 html_source = html_source.render(email_context)
                 pdf_output = 'purchase.pdf'
                 is_pdf_rendered = _render_html_pdf(html_source, pdf_output)
+                to_email = email
+                subject = 'Thanks For Your Purchase'
                 if is_pdf_rendered:
-                    to_email = email
-                    subject = 'Thanks For Your Purchase'
-                    _send_template_email(
-                        html_source, to_email, subject, pdf_output)
+                    _send_email(
+                        subject, html_source, to_email, pdf_output=pdf_output)
                 else:
-                    _send_template_email(
-                        html_source, to_email, subject, pdf_output=None)
+                    _send_email(
+                        subject, html_source, to_email, pdf_output=None)
 
                 return redirect('success', order.id)
             except ObjectDoesNotExist:

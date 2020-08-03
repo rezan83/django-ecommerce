@@ -11,6 +11,7 @@ stripe = "*"
 python-dotenv = "*"
 sendgrid = "*"
 xhtml2pdf = "*"
+django-widget-tweaks = "*"
 
 [dev-packages]
 
