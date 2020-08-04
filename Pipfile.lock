@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6b305f3e7a5aff2b32f2ed0f74c292905e6af4eb5207b836b0ae9bfaffa342ce"
+            "sha256": "1aad0edcfd66ff298947784ee7146af7a7f91e9c8f0c56461f08be75d10cf336"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -68,6 +68,14 @@
             "index": "pypi",
             "version": "==0.3.1"
         },
+        "django-sendgrid-v5": {
+            "hashes": [
+                "sha256:31c2ab2a0c91a3443262d9a39986de0ef306c21f8af55ce67742d1ec02a344c6",
+                "sha256:71efc914ba4c7f80685633dd7940d47af6e009c7c24e63cf25d97e40865ac7d2"
+            ],
+            "index": "pypi",
+            "version": "==0.8.1"
+        },
         "django-widget-tweaks": {
             "hashes": [
                 "sha256:9f91ca4217199b7671971d3c1f323a2bec71a0c27dec6260b3c006fa541bc489",
@@ -75,6 +83,12 @@
             ],
             "index": "pypi",
             "version": "==1.4.8"
+        },
+        "future": {
+            "hashes": [
+                "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"
+            ],
+            "version": "==0.18.2"
         },
         "gunicorn": {
             "hashes": [
@@ -281,11 +295,11 @@
         },
         "whitenoise": {
             "hashes": [
-                "sha256:60154b976a13901414a25b0273a841145f77eb34a141f9ae032a0ace3e4d5b27",
-                "sha256:6dd26bfda3af29177d8ab7333a0c7b7642eb615ce83764f4d15a9aecda3201c4"
+                "sha256:05ce0be39ad85740a78750c86a93485c40f08ad8c62a6006de0233765996e5c7",
+                "sha256:05d00198c777028d72d8b0bbd234db605ef6d60e9410125124002518a48e515d"
             ],
             "index": "pypi",
-            "version": "==5.1.0"
+            "version": "==5.2.0"
         },
         "xhtml2pdf": {
             "hashes": [

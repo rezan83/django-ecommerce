@@ -16,6 +16,7 @@ gunicorn = "*"
 whitenoise = "*"
 psycopg2 = "*"
 django-heroku = "*"
+django-sendgrid-v5 = "*"
 
 [dev-packages]
 
