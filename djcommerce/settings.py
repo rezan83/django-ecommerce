@@ -164,7 +164,8 @@ STORE_NAME = os.getenv('STORE_NAME')
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT  = os.getenv('EMAIL_PORT')
 EMAIL_HOST_USER  = os.getenv('EMAIL_HOST_USER')
