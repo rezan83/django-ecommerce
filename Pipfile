@@ -12,6 +12,10 @@ python-dotenv = "*"
 sendgrid = "*"
 xhtml2pdf = "*"
 django-widget-tweaks = "*"
+gunicorn = "*"
+whitenoise = "*"
+psycopg2 = "*"
+django-heroku = "*"
 
 [dev-packages]
 
