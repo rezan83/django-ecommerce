@@ -46,7 +46,7 @@ else:
     DEBUG = False
     DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['myestora.herokuapp.com', 'localhost']
 
 
 # Application definition
