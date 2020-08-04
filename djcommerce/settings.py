@@ -36,7 +36,7 @@ load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-if os.getenv('DJANGO_DEVELOPMENT'):
+if os.getenv('DJANGO_DEVELOPMENT') == "True":
     DEBUG = True
     # DB_DEFAULT = {
     #     'ENGINE': 'django.db.backends.sqlite3',
