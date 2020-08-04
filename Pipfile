@@ -17,6 +17,8 @@ whitenoise = "*"
 psycopg2 = "*"
 django-heroku = "*"
 django-sendgrid-v5 = "*"
+django-storages = "*"
+boto3 = "*"
 
 [dev-packages]
 

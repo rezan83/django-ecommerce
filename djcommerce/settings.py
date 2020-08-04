@@ -44,6 +44,9 @@ if os.getenv('DJANGO_DEVELOPMENT') == "True":
     #     }
 else:
     DEBUG = False
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.s3Boto3Storage'
     # DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
 
 ALLOWED_HOSTS = ['myestora.herokuapp.com', 'localhost']
@@ -58,9 +61,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'stripe',
     'crispy_forms',
     'widget_tweaks',
+    'storages',
+    
     'commerce',
 ]
 
