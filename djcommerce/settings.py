@@ -38,13 +38,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 if os.getenv('DJANGO_DEVELOPMENT'):
     DEBUG = True
-    DB_DEFAULT = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+    # DB_DEFAULT = {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #     }
 else:
     DEBUG = False
-    DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
+    # DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
 
 ALLOWED_HOSTS = ['myestora.herokuapp.com', 'localhost']
 
@@ -101,7 +101,10 @@ WSGI_APPLICATION = 'djcommerce.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': DB_DEFAULT
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 
