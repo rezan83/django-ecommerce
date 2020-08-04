@@ -25,7 +25,7 @@ load_dotenv()
 # load_dotenv(verbose=True)
 
 # # OR, explicitly providing path to '.env'
-#from pathlib import Path  # Python 3.6+ only
+# from pathlib import Path  # Python 3.6+ only
 # env_path = Path('.') / '.env'
 # load_dotenv(dotenv_path=env_path)
 
@@ -147,7 +147,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATICFIELS = os.path.join(BASE_DIR, 'static')
+STATICFIELS_DIRS = [os.path.join(BASE_DIR, 'static'),
+                    os.path.join(BASE_DIR, 'staticfiles')
+                    ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -167,8 +169,8 @@ SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_PORT  = os.getenv('EMAIL_PORT')
-EMAIL_HOST_USER  = os.getenv('EMAIL_HOST_USER')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_TO = os.getenv('EMAIL_TO')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
@@ -179,7 +181,3 @@ EMAIL_USE_SSL = False
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 django_heroku.settings(locals())
-
-
-
-
