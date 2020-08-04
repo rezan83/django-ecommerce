@@ -37,18 +37,20 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 if os.getenv('DJANGO_DEVELOPMENT') == "True":
-    DEBUG = True
+    pass
+    # DEBUG = True
     # DB_DEFAULT = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     #     }
 else:
-    DEBUG = False
+    # DEBUG = False
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.s3Boto3Storage'
     # DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
 
+DEBUG = os.getenv('DEBUG') == "True"
 ALLOWED_HOSTS = ['myestora.herokuapp.com', 'localhost']
 
 
@@ -66,7 +68,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'widget_tweaks',
     'storages',
-    
+
     'commerce',
 ]
 
