@@ -19,6 +19,8 @@ django-heroku = "*"
 django-sendgrid-v5 = "*"
 django-storages = "*"
 boto3 = "*"
+dj-database-url = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

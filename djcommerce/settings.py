@@ -9,13 +9,13 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-import django_heroku
-import boto3
 
-from sendgrid.helpers.mail import Mail
-from sendgrid import SendGridAPIClient
 import os
 import ast
+import django_heroku
+import boto3
+from sendgrid.helpers.mail import Mail
+from sendgrid import SendGridAPIClient
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -25,7 +25,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv()
 # # OR, the same with increased verbosity
 # load_dotenv(verbose=True)
-
 # # OR, explicitly providing path to '.env'
 # from pathlib import Path  # Python 3.6+ only
 # env_path = Path('.') / '.env'
@@ -100,8 +99,12 @@ WSGI_APPLICATION = 'djcommerce.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 

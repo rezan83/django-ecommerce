@@ -1,1 +1,1 @@
-web: gunicorn djcommerce.wsgi
+web: gunicorn --log-file djcommerce.wsgi
