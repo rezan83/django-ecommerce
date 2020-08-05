@@ -40,11 +40,10 @@ def search(request):
 
 
 def _render_html_pdf(html_source, pdf_output):
-    result_file = open(pdf_output, "w+b")
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-        html_source, dest=result_file)
-    result_file.close()
+    with open(pdf_output, "w+b") as result_file:
+        # create a pdf
+        pisa_status = pisa.CreatePDF(html_source, dest=result_file)
+        result_file.close()
     if pisa_status.err:
         return False
     else:

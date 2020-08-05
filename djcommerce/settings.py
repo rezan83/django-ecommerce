@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import django_heroku
+import boto3
+
 from sendgrid.helpers.mail import Mail
 from sendgrid import SendGridAPIClient
 import os
@@ -36,19 +38,6 @@ load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-if os.getenv('DJANGO_DEVELOPMENT') == "True":
-    pass
-    # DEBUG = True
-    # DB_DEFAULT = {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #     }
-else:
-    # DEBUG = False
-    AWS_S3_FILE_OVERWRITE = False
-    AWS_DEFAULT_ACL = None
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.s3Boto3Storage'
-    # DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
 
 DEBUG = os.getenv('DEBUG') == "True"
 ALLOWED_HOSTS = ['myestora.herokuapp.com', 'localhost']
@@ -187,5 +176,31 @@ EMAIL_USE_SSL = False
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# aws settings
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = 'eu-central-1'
+# this is nessessary with versions previous to boto3 1.4.4
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+if os.getenv('DJANGO_DEVELOPMENT') == "True":
+    pass
+    # DEBUG = True
+    # DB_DEFAULT = {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #     }
+else:
+    pass
+    # DEBUG = False
+    # DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
 
 django_heroku.settings(locals())
