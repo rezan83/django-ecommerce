@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import dj_database_url
+import urllib.parse
 import os
-import ast
 import django_heroku
 import boto3
 from sendgrid.helpers.mail import Mail
@@ -100,6 +100,8 @@ WSGI_APPLICATION = 'djcommerce.wsgi.application'
 
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
@@ -117,12 +119,11 @@ if os.getenv('DJANGO_DEVELOPMENT') == "True":
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     #     }
 else:
-    DATABASES['default'] = dj_database_url.config(
-        conn_max_age=600, ssl_require=True)
+
+    env_database = dj_database_url.config(
+        conn_max_age=600)
+    DATABASES['default'].update(env_database)
     # DEBUG = False
-    # DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -217,8 +218,6 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
 
 
 django_heroku.settings(locals())
