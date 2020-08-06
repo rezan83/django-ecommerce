@@ -116,8 +116,7 @@ if os.getenv('DJANGO_DEVELOPMENT') == "True":
 
 else:
     # DEBUG = False
-    env_database = dj_database_url.config(engine='django.db.backends.postgresql',
-                                          conn_max_age=600, ssl_require=True)
+    env_database = dj_database_url.config(conn_max_age=600, ssl_require=True)
     DATABASES['default'].update(env_database)
 
 # Password validation
