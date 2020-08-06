@@ -111,16 +111,15 @@ DATABASES = {
     }
 }
 
-# if os.getenv('DJANGO_DEVELOPMENT') == "True":
-#     pass
-#     # DEBUG = True
-#
-# else:
-    # DEBUG = False
+if os.getenv('DJANGO_DEVELOPMENT') == "True":
+    pass
+    # DEBUG = True
 
-env_database = dj_database_url.config(engine='django.db.backends.postgresql',
-    conn_max_age=600)
-DATABASES['default'].update(env_database)
+else:
+    # DEBUG = False
+    env_database = dj_database_url.config(engine='django.db.backends.postgresql',
+        conn_max_age=600)
+    DATABASES['default'].update(env_database)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -167,8 +166,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFIELS_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'staticfiles'),
-    os.path.join(BASE_DIR, 'commerce', 'static'),
 ]
 
 
