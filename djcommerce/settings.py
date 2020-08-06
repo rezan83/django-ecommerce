@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import dj_database_url
-import urllib.parse
 import os
 import django_heroku
 import boto3
@@ -40,7 +39,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG') == "True"
 
-ALLOWED_HOSTS = ['myestora.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['myestora.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -118,7 +117,7 @@ if os.getenv('DJANGO_DEVELOPMENT') == "True":
 else:
     # DEBUG = False
     env_database = dj_database_url.config(engine='django.db.backends.postgresql',
-        conn_max_age=600)
+                                          conn_max_age=600, ssl_require=True)
     DATABASES['default'].update(env_database)
 
 # Password validation
@@ -166,6 +165,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFIELS_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'staticfiles')
 ]
 
 
