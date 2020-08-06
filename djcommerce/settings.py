@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+import dj_database_url
 import os
 import ast
 import django_heroku
@@ -37,8 +38,8 @@ load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-
 DEBUG = os.getenv('DEBUG') == "True"
+
 ALLOWED_HOSTS = ['myestora.herokuapp.com', 'localhost']
 
 
@@ -108,6 +109,20 @@ DATABASES = {
     }
 }
 
+if os.getenv('DJANGO_DEVELOPMENT') == "True":
+    pass
+    # DEBUG = True
+    # DB_DEFAULT = {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #     }
+else:
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600, ssl_require=True)
+    # DEBUG = False
+    # DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -133,7 +148,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
 
@@ -145,11 +160,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+# STATIC_NAME = 'static'
+# AWS_DOMAIN = os.getenv('AWS_DOMAIN')
+# STATIC_URL = f'{AWS_DOMAIN}/{STATIC_NAME}/'
+# print(STATIC_URL)
+# STATIC_ROOT = f'{AWS_DOMAIN}/{STATIC_NAME}/'
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFIELS_DIRS = [os.path.join(BASE_DIR, 'static'),
-                    os.path.join(BASE_DIR, 'staticfiles')
-                    ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFIELS_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'staticfiles'),
+    os.path.join(BASE_DIR, 'commerce', 'static'),
+]
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -176,13 +199,10 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # aws settings
 AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
+AWS_DEFAULT_ACL = 'public-read'
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
@@ -192,18 +212,13 @@ AWS_S3_SIGNATURE_VERSION = 's3v4'
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-if os.getenv('DJANGO_DEVELOPMENT') == "True":
-    pass
-    # DEBUG = True
-    # DB_DEFAULT = {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #     }
-else:
-    pass
-    # DEBUG = False
-    # DB_DEFAULT = ast.literal_eval(os.getenv('DB_PRODUCTION'))
+
 
 django_heroku.settings(locals())
