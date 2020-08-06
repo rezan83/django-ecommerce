@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-# import dj_database_url
+import dj_database_url
 import os
 import django_heroku
 import boto3
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     'stripe',
@@ -116,8 +117,9 @@ DATABASES = {
 
 # else:
 #     # DEBUG = False
-#     env_database = dj_database_url.config(conn_max_age=600, ssl_require=True)
-#     DATABASES['default'].update(env_database)
+
+env_database = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'].update(env_database)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
