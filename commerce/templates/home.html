@@ -36,7 +36,7 @@
             <div class="card mb-4 " style="border-color:transparent">
                 <div class="p-2">
                 <a href="{{ product.url}} ">
-                    <img class="card-img-top p-4" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <img class="card-img-top p-4" src="{% if product.image %}{{ product.image.url }}{% endif %}" alt="{{ product.name }}">
                  </a>
                     <div class="footer bg-white d-flex p-2 justify-content-around">
                         <p class="font-weight-bold mb-0">
