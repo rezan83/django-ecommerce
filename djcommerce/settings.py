@@ -118,7 +118,7 @@ DATABASES = {
 # else:
     # DEBUG = False
 
-env_database = dj_database_url.config(
+env_database = dj_database_url.config(engine='django.db.backends.postgresql',
     conn_max_age=600)
 DATABASES['default'].update(env_database)
 
